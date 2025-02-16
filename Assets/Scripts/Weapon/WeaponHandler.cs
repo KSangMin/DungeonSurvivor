@@ -9,21 +9,21 @@ public class WeaponHandler : MonoBehaviour
     public float Delay { get => delay; set => delay = value; }
     [SerializeField] private float weaponSize = 1f;
     public float WeaponSize { get => weaponSize; set => weaponSize = value; }
-    [SerializeField] public float power = 1f;
+    [SerializeField] private float power = 1f;
     public float Power { get => power; set => power = value; }
-    [SerializeField] public float speed = 1f;
+    [SerializeField] private float speed = 1f;
     public float Speed { get => speed; set => speed = value; }
-    [SerializeField] public float attackRange = 10f;
+    [SerializeField] private float attackRange = 10f;
     public float AttackRange { get => attackRange; set => attackRange = value; }
 
     public LayerMask target;
 
     [Header("Knockback Info")]
-    [SerializeField] public bool isOnKnockBack = false;
+    [SerializeField] private bool isOnKnockBack = false;
     public bool IsOnKnockBack { get => isOnKnockBack; set => isOnKnockBack = value; }
-    [SerializeField] public float knockbackPower = 0.1f;
+    [SerializeField] private float knockbackPower = 0.1f;
     public float KnockbackPower { get => knockbackPower; set => knockbackPower = value; }
-    [SerializeField] public float knockbackTime = 0.5f;
+    [SerializeField] private float knockbackTime = 0.5f;
     public float KnockbackTime { get => knockbackTime; set => knockbackTime = value; }
     private static readonly int isAttack = Animator.StringToHash("isAttack");
     

@@ -42,7 +42,11 @@ public class RangeWeaponHandler : WeaponHandler
 
     private void CreateProjectile(Vector2 lookDir, float angle)
     {
-
+        ProjectileManager.Instance.ShootBullet(
+            this,
+            projectileSpawnPos.position,
+            RotateVector2(lookDir, angle)
+            );
     }
 
     private static Vector2 RotateVector2(Vector2 v, float degree)
