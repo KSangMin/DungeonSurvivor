@@ -74,6 +74,11 @@ public class ProjectileController : MonoBehaviour
 
     private void DestroyProjectile(Vector3 pos, bool createFx)
     {
+        if (createFx)
+        {
+            ProjectileManager.Instance.CreateImpactParticleAtPosition(pos, _rangeWeaponHandler);
+        }
+
         Destroy(this.gameObject);
     }
 }
