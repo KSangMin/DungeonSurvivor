@@ -19,7 +19,7 @@ public class AnimationHandler : MonoBehaviour
         animator.SetBool(isMoving, obj.magnitude > 0.5f);
     }
 
-    public void Hit(Vector2 obj)
+    public void Hit()
     {
         animator.SetBool(isHit, true);
     }
