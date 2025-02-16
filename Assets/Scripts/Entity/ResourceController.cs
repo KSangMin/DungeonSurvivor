@@ -38,4 +38,33 @@ public class ResourceController : MonoBehaviour
             }
         }
     }
+
+    public bool ChangeHealth(float change)
+    {
+        if(change == 0 || timeSinceLastChange <  healthChangeDelay)
+        {
+            return false;
+        }
+
+        timeSinceLastChange = 0;
+        CurHealth += change;
+        CurHealth = CurHealth > MaxHealth ? MaxHealth : CurHealth;
+        CurHealth = CurHealth < 0 ? 0 : CurHealth;
+
+        if(change < 0)
+        {
+            animationHandler.Hit();
+        }
+        if(CurHealth > 0)
+        {
+            Death();
+        }
+
+        return true;
+    }
+
+    private void Death()
+    {
+
+    }
 }

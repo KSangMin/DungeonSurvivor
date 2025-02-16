@@ -19,11 +19,26 @@ public class BaseController : MonoBehaviour
     protected AnimationHandler animationHandler;
     protected StatHandler statHandler;
 
+    [SerializeField] public WeaponHandler weaponPrefab;
+    protected WeaponHandler weaponHandler;
+
+    protected bool isAttacking;
+    private float _timeSinceLastAttack = float.MaxValue;
+
     protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         animationHandler = GetComponent<AnimationHandler>();
         statHandler = GetComponent<StatHandler>();
+
+        if(weaponPrefab != null)
+        {
+            weaponHandler = Instantiate(weaponPrefab, _weaponPivot);
+        }
+        else
+        {
+            weaponHandler = GetComponentInChildren<WeaponHandler>();
+        }
     }
 
     protected virtual void Start()
@@ -35,6 +50,7 @@ public class BaseController : MonoBehaviour
     {
         HandleAction();
         Rotate(lookDir);
+        HandleAttackDelay();
     }
 
     protected virtual void FixedUpdate()
@@ -75,11 +91,41 @@ public class BaseController : MonoBehaviour
         {
             _weaponPivot.rotation = Quaternion.Euler(0f, 0f, rotZ);
         }
+
+        weaponHandler.Rotate(isLeft);
     }
 
     public void ApplyKnockback(Transform other, float power, float duration)
     {
         knockbackDuration = duration;
         knockback = -(other.position - transform.position).normalized * power;
+    }
+
+    private void HandleAttackDelay()
+    {
+        if (weaponHandler is null)
+        {
+            return;
+        }
+
+        if(_timeSinceLastAttack <= weaponHandler.Delay)
+        {
+            _timeSinceLastAttack += Time.deltaTime;
+        }
+
+        if(isAttacking && _timeSinceLastAttack > weaponHandler.Delay)
+        {
+            _timeSinceLastAttack = 0;
+            Attack();
+        }
+    }
+
+    protected virtual void Attack()
+    {
+        if (lookDir != Vector2.zero)
+        {
+            weaponHandler?.Attack();
+
+        }
     }
 }
