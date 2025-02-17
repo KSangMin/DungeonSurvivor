@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class PlayerController : BaseController
 {
@@ -11,17 +13,25 @@ public class PlayerController : BaseController
         _camera = Camera.main;
     }
 
-    protected override void HandleAction()
+    public override void Death()
     {
-        float hor = Input.GetAxisRaw("Horizontal");
-        float ver = Input.GetAxisRaw("Vertical");
-        movementDir = new Vector2(hor, ver).normalized;
+        base.Death();
+        GameManager.Instance.GameOver();
+    }
 
-        Vector2 mousePos = Input.mousePosition;
+    void OnMove(InputValue value)
+    {
+        movementDir = value.Get<Vector2>();
+        movementDir = movementDir.normalized;
+    }
+
+    void OnLook(InputValue value)
+    {
+        Vector2 mousePos = value.Get<Vector2>();
         Vector2 worldPos = _camera.ScreenToWorldPoint(mousePos);
         lookDir = (worldPos - (Vector2)transform.position);
 
-        if(lookDir.magnitude < 0.9f)
+        if (lookDir.magnitude < 0.9f)
         {
             lookDir = Vector2.zero;
         }
@@ -29,13 +39,14 @@ public class PlayerController : BaseController
         {
             lookDir = lookDir.normalized;
         }
-
-        isAttacking = Input.GetMouseButton(0);
     }
 
-    public override void Death()
+    void OnFire(InputValue value)
     {
-        base.Death();
-        GameManager.Instance.GameOver();
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+        isAttacking = value.isPressed;
     }
 }

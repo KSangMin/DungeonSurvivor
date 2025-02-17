@@ -19,8 +19,6 @@ public class UIManager : Singleton<UIManager>
 
     private void Awake()
     {
-        base.Awake();
-
         homeUI = GetComponentInChildren<HomeUI>(true);
         homeUI.Init();
         gameUI = GetComponentInChildren<GameUI>(true);
