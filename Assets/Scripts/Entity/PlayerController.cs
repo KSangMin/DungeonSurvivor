@@ -6,9 +6,8 @@ public class PlayerController : BaseController
 {
     private Camera _camera;
 
-    protected override void Start()
+    public void Init()
     {
-        base.Start();
         _camera = Camera.main;
     }
 

@@ -19,6 +19,12 @@ public class EnemyManager : Singleton<EnemyManager>
 
     public void StartWave(int waveCount)
     {
+        if(waveCount <= 0)
+        {
+            GameManager.Instance.EndWave();
+            return;
+        }
+
         if(_waveRoutine != null)
         {
             StopCoroutine(_waveRoutine);
@@ -76,14 +82,6 @@ public class EnemyManager : Singleton<EnemyManager>
             Vector3 size = new Vector3(area.width, area.height);
 
             Gizmos.DrawCube(center, size);
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartWave(1);
         }
     }
 }
