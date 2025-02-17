@@ -57,6 +57,7 @@ MonoBehaviour:
   isOnKnockBack: 1
   knockbackPower: 0.1
   knockbackTime: 0.5
+  attackSoundClip: {fileID: 8300000, guid: 8459d4423c2c53146867b617d6af9da6, type: 3}
   projectileSpawnPos: {fileID: 3520701291810572191}
   _bulletIndex: 0
   _bulletSize: 0.7
