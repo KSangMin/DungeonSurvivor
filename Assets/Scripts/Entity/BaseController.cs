@@ -92,7 +92,7 @@ public class BaseController : MonoBehaviour
             _weaponPivot.rotation = Quaternion.Euler(0f, 0f, rotZ);
         }
 
-        weaponHandler.Rotate(isLeft);
+        weaponHandler?.Rotate(isLeft);
     }
 
     public void ApplyKnockback(Transform other, float power, float duration)
@@ -127,5 +127,24 @@ public class BaseController : MonoBehaviour
             weaponHandler?.Attack();
 
         }
+    }
+
+    public virtual void Death()
+    {
+        _rb. velocity = Vector3.zero;
+
+        foreach(SpriteRenderer r in transform.GetComponentsInChildren<SpriteRenderer>())
+        {
+            Color color = r.color;
+            color.a = 0.3f;
+            r.color = color;
+        }
+
+        foreach(Behaviour component  in transform.GetComponentsInChildren<Behaviour>())
+        {
+            component.enabled = false;
+        }
+
+        Destroy(gameObject, 2f);
     }
 }

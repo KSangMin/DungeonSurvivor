@@ -65,7 +65,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &3388800429790117405
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterRenderer: {fileID: 4392633577621334212}
   _weaponPivot: {fileID: 7874828238334072439}
-  weaponPrefab: {fileID: 3156417187959687682, guid: f630a694af733ba43b7ca31eaedcbc23, type: 3}
+  weaponPrefab: {fileID: 0}
   _followRange: 15
 --- !u!1 &5002191838331543064
 GameObject:

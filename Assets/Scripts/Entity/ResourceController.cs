@@ -55,7 +55,8 @@ public class ResourceController : MonoBehaviour
         {
             animationHandler.Hit();
         }
-        if(CurHealth > 0)
+
+        if(CurHealth <= 0)
         {
             Death();
         }
@@ -65,6 +66,6 @@ public class ResourceController : MonoBehaviour
 
     private void Death()
     {
-
+        baseController.Death();
     }
 }

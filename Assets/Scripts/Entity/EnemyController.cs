@@ -60,4 +60,10 @@ public class EnemyController : BaseController
             movementDir = dir;
         }
     }
+
+    public override void Death()
+    {
+        base.Death();
+        EnemyManager.Instance.RemoveEnemyOnDeath(this);
+    }
 }
