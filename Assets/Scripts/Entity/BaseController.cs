@@ -49,7 +49,7 @@ public class BaseController : MonoBehaviour
     protected virtual void Update()
     {
         HandleAction();
-        Rotate(lookDir);
+        Rotate(LookDir);
         HandleAttackDelay();
     }
 

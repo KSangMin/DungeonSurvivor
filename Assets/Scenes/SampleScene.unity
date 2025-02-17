@@ -2737,6 +2737,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthChangeDelay: 0.5
+--- !u!1 &866138721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 866138723}
+  - component: {fileID: 866138722}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &866138722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866138721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a853e1fa69e42f4faeb87fc853c4b70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyPrefabs:
+  - {fileID: 6417287744538276556, guid: 807f6560e58ddcf4ba38044908f25b33, type: 3}
+  - {fileID: 4339266997621905242, guid: dd4297981b902434caec36ed6b14d072, type: 3}
+  spawnAreas:
+  - serializedVersion: 2
+    x: -7.5
+    y: -4.5
+    width: 4
+    height: 8
+  - serializedVersion: 2
+    x: 3.5
+    y: -4.5
+    width: 4
+    height: 8
+  _gizmoColor: {r: 1, g: 0, b: 0, a: 0.3}
+  _timeBetweenSpawns: 0.2
+  _timeBetweenWaves: 1
+--- !u!4 &866138723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866138721}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.50506204, y: 0.2577972, z: -4.3747306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1265505579
 GameObject:
   m_ObjectHideFlags: 0
@@ -13943,3 +14004,4 @@ SceneRoots:
   - {fileID: 590138799}
   - {fileID: 1540478294}
   - {fileID: 199084461}
+  - {fileID: 866138723}
