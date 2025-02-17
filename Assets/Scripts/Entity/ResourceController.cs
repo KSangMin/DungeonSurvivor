@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class ResourceController : MonoBehaviour
     public float MaxHealth => statHandler.Health;
 
     public AudioClip hitClip;
+
+    private Action<float, float> OnChangeHealth;
 
     private void Awake()
     {
@@ -53,6 +56,8 @@ public class ResourceController : MonoBehaviour
         CurHealth = CurHealth > MaxHealth ? MaxHealth : CurHealth;
         CurHealth = CurHealth < 0 ? 0 : CurHealth;
 
+        OnChangeHealth?.Invoke(CurHealth, MaxHealth);
+
         if(change < 0)
         {
             animationHandler.Hit();
@@ -74,5 +79,15 @@ public class ResourceController : MonoBehaviour
     private void Death()
     {
         baseController.Death();
+    }
+
+    public void AddHealthChangeEvent(Action<float, float> action)
+    {
+        OnChangeHealth += action;
+    }
+
+    public void RemoveHealthChangeEvent(Action<float, float> action)
+    {
+        OnChangeHealth -= action;
     }
 }

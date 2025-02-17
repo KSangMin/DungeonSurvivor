@@ -9,16 +9,34 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private int curWaveId = 0;
 
+    public static bool isFirstLoading = true;
+
     private void Awake()
     {
         base.Awake();
 
         player = FindObjectOfType<PlayerController>();
         player.Init();
+
+        _playerResourceController = player.GetComponent<ResourceController>();
+        _playerResourceController.RemoveHealthChangeEvent(UIManager.Instance.ChangePlayerHP);
+        _playerResourceController.AddHealthChangeEvent(UIManager.Instance.ChangePlayerHP);
+    }
+    private void Start()
+    {
+        if (!isFirstLoading)
+        {
+            StartGame();
+        }
+        else
+        {
+            isFirstLoading = false;
+        }
     }
 
     public void StartGame()
     {
+        UIManager.Instance.SetPlayGame();
         StartNextWave();
     }
 
@@ -26,6 +44,7 @@ public class GameManager : Singleton<GameManager>
     {
         curWaveId++;
         EnemyManager.Instance.StartWave(1 + curWaveId / 5);
+        UIManager.Instance.ChangeWave(curWaveId);
     }
 
     public void EndWave()
@@ -36,13 +55,6 @@ public class GameManager : Singleton<GameManager>
     public void GameOver()
     {
         EnemyManager.Instance.StopWave();
-    }
-
-    private void Update()
-    {
-       if(Input.GetKeyDown(KeyCode.Space))
-       {
-            StartGame();
-       }
+        UIManager.Instance.SetGameOver();
     }
 }
