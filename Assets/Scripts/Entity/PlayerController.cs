@@ -49,4 +49,23 @@ public class PlayerController : BaseController
         }
         isAttacking = value.isPressed;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.TryGetComponent<ItemHandler>(out ItemHandler item))
+        {
+            if (item.ItemData == null) return;
+
+            UseItem(item.ItemData);
+            Destroy(item.gameObject);
+        }   
+    }
+
+    public void UseItem(ItemData item)
+    {
+        foreach(StatEntry modifier in item.statModifiers)
+        {
+            statHandler.ModifyStat(modifier.statType, modifier.baseValue, !item.isTemporary, modifier.baseValue);
+        }
+    }
 }

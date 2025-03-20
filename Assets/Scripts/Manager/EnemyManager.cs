@@ -18,6 +18,8 @@ public class EnemyManager : Singleton<EnemyManager>
     [SerializeField] private float _timeBetweenSpawns = 0.2f;
     [SerializeField] private float _timeBetweenWaves = 1f;
 
+    [SerializeField] private List<GameObject> _itemPrefabs;
+
     public override void Awake()
     {
         base.Awake();
@@ -107,10 +109,16 @@ public class EnemyManager : Singleton<EnemyManager>
     public void RemoveEnemyOnDeath(EnemyController enemy)
     {
         _activeEnemies.Remove(enemy);
-        if(_enemySpawnComplete && _activeEnemies.Count <= 0)
+        CreateRandomItem(enemy.transform.position);
+        if (_enemySpawnComplete && _activeEnemies.Count <= 0)
         {
             GameManager.Instance.EndWave();
         }
+    }
+
+    public void CreateRandomItem(Vector3 pos)
+    {
+        GameObject item = Instantiate(_itemPrefabs[Random.Range(0, _itemPrefabs.Count)], pos, Quaternion.identity);
     }
 
     public void StartStage(StageInstance stage)
