@@ -14,6 +14,8 @@ public class GameManager : Singleton<GameManager>
 
     private CameraShake _cameraShake;
 
+    private StageInstance _curStageInstance;
+
     public override void Awake()
     {
         base.Awake();
@@ -26,7 +28,6 @@ public class GameManager : Singleton<GameManager>
         _playerResourceController.AddHealthChangeEvent(UIManager.Instance.ChangePlayerHP);
 
         _cameraShake = FindObjectOfType<CameraShake>();
-        MainCameraShake();
     }
 
     private void Start()
@@ -44,8 +45,7 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         UIManager.Instance.SetPlayGame();
-        //StartNextWave();
-        StartStage();
+        LoadOrStartNewStage();
     }
 
     void StartNextWave()
@@ -65,6 +65,7 @@ public class GameManager : Singleton<GameManager>
     {
         EnemyManager.Instance.StopWave();
         UIManager.Instance.SetGameOver();
+        StageSaveManager.ClearSavedStage();
     }
 
     public void MainCameraShake()
@@ -72,28 +73,47 @@ public class GameManager : Singleton<GameManager>
         _cameraShake.ShakeCamera(1, 1, 1);
     }
 
-    public void StartStage()
+    private void LoadOrStartNewStage()
     {
-        StageInfo stage = GetStageInfo(curStageId);
+        StageInstance savedInstace = StageSaveManager.LoadStageInstance();
 
-        if(stage == null)
+        if (savedInstace != null) _curStageInstance = savedInstace;
+        else _curStageInstance = new StageInstance(0, 0);
+
+        StartStage(_curStageInstance);
+    }
+
+    public void StartStage(StageInstance stageInstance)
+    {
+        curStageId = stageInstance.stageKey;
+        curWaveId = stageInstance.curWave;
+
+        StageInfo stageInfo = GetStageInfo(curStageId);
+
+        if(stageInfo == null)
         {
             Debug.Log("스테이지 정보가 없습니다.");
+            StageSaveManager.ClearSavedStage();
+            _curStageInstance = null;
             return;
         }
 
+        stageInstance.SetStageInfo(stageInfo);
+
         UIManager.Instance.ChangeWave(curStageId + 1);
-        EnemyManager.Instance.StartStage(stage.waves[curWaveId]);
+        EnemyManager.Instance.StartStage(_curStageInstance);
+        StageSaveManager.SaveStageInstance(_curStageInstance);
     }
 
     public void StartNextWaveInStage()
     {
-        StageInfo stage = GetStageInfo(curStageId);
+        Debug.Log("스테이지: " + curStageId);
+        Debug.Log("웨이브: " + curWaveId);
 
-        if(stage.waves.Length - 1> curWaveId)
+        if(_curStageInstance.CheckEndofWave())
         {
-            curWaveId++;
-            StartStage();
+            _curStageInstance.curWave++;
+            StartStage(_curStageInstance);
         }
         else
         {
@@ -103,9 +123,13 @@ public class GameManager : Singleton<GameManager>
 
     public void CompleteStage()
     {
-        curStageId++;
-        curWaveId = 0;
-        StartStage();
+        StageSaveManager.ClearSavedStage();
+
+        if (_curStageInstance == null) return;
+
+        _curStageInstance.stageKey++;
+        _curStageInstance.curWave = 0;
+        StartStage(_curStageInstance);
     }
 
     StageInfo GetStageInfo(int stageKey)

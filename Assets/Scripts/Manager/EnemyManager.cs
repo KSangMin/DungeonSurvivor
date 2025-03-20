@@ -67,8 +67,6 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         if (_enemyPrefabs.Count == 0 || spawnAreas.Count == 0) return;
 
-        Debug.Log("Àû »ý¼ºµÊ");
-
         GameObject randomPrefab;
         if(prefabName == null)
         {
@@ -115,18 +113,20 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
-    public void StartStage(WaveData wave)
+    public void StartStage(StageInstance stage)
     {
         if(_waveRoutine != null) StopCoroutine(_waveRoutine);
 
-        _waveRoutine = StartCoroutine(SpawnStart(wave));
+        _waveRoutine = StartCoroutine(SpawnStart(stage));
     }
 
-    IEnumerator SpawnStart(WaveData wave)
+    IEnumerator SpawnStart(StageInstance stage)
     {
         _enemySpawnComplete = false;
 
         yield return new WaitForSeconds(_timeBetweenWaves);
+
+        WaveData wave = stage.curStageInfo.waves[stage.curWave];
 
         for(int i = 0; i < wave.monsters.Length; i++)
         {
