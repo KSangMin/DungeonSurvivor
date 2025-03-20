@@ -23,6 +23,7 @@ public class HomeUI : BaseUI
 
     public void OnClickExitButton()
     {
+        StageSaveManager.ClearSavedStage();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

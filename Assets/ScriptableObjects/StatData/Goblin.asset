@@ -15,6 +15,6 @@ MonoBehaviour:
   characterName: Goblin
   stats:
   - statType: 0
-    baseValue: 100
+    baseValue: 3
   - statType: 1
     baseValue: 5
