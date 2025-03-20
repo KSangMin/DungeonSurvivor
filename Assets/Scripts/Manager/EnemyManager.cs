@@ -7,6 +7,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private Coroutine _waveRoutine;
 
     [SerializeField] private List<GameObject> _enemyPrefabs;
+    private Dictionary<string , GameObject> _enemyPrefabDict;
 
     [SerializeField] List<Rect> spawnAreas;
     [SerializeField] private Color _gizmoColor = new Color(1, 0, 0, 0.3f);
@@ -16,6 +17,17 @@ public class EnemyManager : Singleton<EnemyManager>
 
     [SerializeField] private float _timeBetweenSpawns = 0.2f;
     [SerializeField] private float _timeBetweenWaves = 1f;
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        _enemyPrefabDict = new Dictionary<string , GameObject>();
+        foreach(GameObject prefab in _enemyPrefabs)
+        {
+            _enemyPrefabDict[prefab.name] = prefab;
+        }
+    }
 
     public void StartWave(int waveCount)
     {
@@ -51,13 +63,21 @@ public class EnemyManager : Singleton<EnemyManager>
         _enemySpawnComplete = true;
     }
 
-    private void SpawnRandomEnemy()
+    private void SpawnRandomEnemy(string prefabName = null)
     {
         if (_enemyPrefabs.Count == 0 || spawnAreas.Count == 0) return;
 
         Debug.Log("Àû »ý¼ºµÊ");
 
-        GameObject randomPrefab = _enemyPrefabs[Random.Range(0, _enemyPrefabs.Count)];
+        GameObject randomPrefab;
+        if(prefabName == null)
+        {
+            randomPrefab = _enemyPrefabs[Random.Range(0, _enemyPrefabs.Count)];
+        }
+        else
+        {
+            randomPrefab = _enemyPrefabDict[prefabName];
+        }
 
         Rect randomArea = spawnAreas[Random.Range(0, spawnAreas.Count)];
 
@@ -86,7 +106,6 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
-
     public void RemoveEnemyOnDeath(EnemyController enemy)
     {
         _activeEnemies.Remove(enemy);
@@ -94,5 +113,40 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             GameManager.Instance.EndWave();
         }
+    }
+
+    public void StartStage(WaveData wave)
+    {
+        if(_waveRoutine != null) StopCoroutine(_waveRoutine);
+
+        _waveRoutine = StartCoroutine(SpawnStart(wave));
+    }
+
+    IEnumerator SpawnStart(WaveData wave)
+    {
+        _enemySpawnComplete = false;
+
+        yield return new WaitForSeconds(_timeBetweenWaves);
+
+        for(int i = 0; i < wave.monsters.Length; i++)
+        {
+            yield return new WaitForSeconds(_timeBetweenWaves);
+
+            MonsterSpawnData monster = wave.monsters[i];
+            for(int j = 0; j < monster.spawnCount; j++)
+            {
+                SpawnRandomEnemy(monster.monsterType);
+            }
+        }
+
+        if (wave.hasBoss)
+        {
+            yield return new WaitForSeconds(_timeBetweenWaves);
+
+            GameManager.Instance.MainCameraShake();
+            SpawnRandomEnemy(wave.bossType);
+        }
+
+        _enemySpawnComplete = true;
     }
 }

@@ -7,6 +7,7 @@ public class GameManager : Singleton<GameManager>
     public PlayerController player {  get; private set; }
     private ResourceController _playerResourceController;
 
+    [SerializeField] private int curStageId = 0;
     [SerializeField] private int curWaveId = 0;
 
     public static bool isFirstLoading = true;
@@ -43,7 +44,8 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         UIManager.Instance.SetPlayGame();
-        StartNextWave();
+        //StartNextWave();
+        StartStage();
     }
 
     void StartNextWave()
@@ -55,7 +57,8 @@ public class GameManager : Singleton<GameManager>
 
     public void EndWave()
     {
-        StartNextWave();
+        //StartNextWave();
+        StartNextWaveInStage();
     }
 
     public void GameOver()
@@ -67,5 +70,51 @@ public class GameManager : Singleton<GameManager>
     public void MainCameraShake()
     {
         _cameraShake.ShakeCamera(1, 1, 1);
+    }
+
+    public void StartStage()
+    {
+        StageInfo stage = GetStageInfo(curStageId);
+
+        if(stage == null)
+        {
+            Debug.Log("스테이지 정보가 없습니다.");
+            return;
+        }
+
+        UIManager.Instance.ChangeWave(curStageId + 1);
+        EnemyManager.Instance.StartStage(stage.waves[curWaveId]);
+    }
+
+    public void StartNextWaveInStage()
+    {
+        StageInfo stage = GetStageInfo(curStageId);
+
+        if(stage.waves.Length - 1> curWaveId)
+        {
+            curWaveId++;
+            StartStage();
+        }
+        else
+        {
+            CompleteStage();
+        }
+    }
+
+    public void CompleteStage()
+    {
+        curStageId++;
+        curWaveId = 0;
+        StartStage();
+    }
+
+    StageInfo GetStageInfo(int stageKey)
+    {
+        foreach(var stage in StageData.Stages)
+        {
+            if (stage.stageKey == stageKey) return stage;
+        }
+
+        return null;
     }
 }

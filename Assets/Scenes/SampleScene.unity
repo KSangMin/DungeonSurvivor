@@ -6688,6 +6688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562d269a5220be646b6ed26da46cd1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curStageId: 0
   curWaveId: 0
 --- !u!4 &804310941
 Transform:
@@ -6748,6 +6749,16 @@ MonoBehaviour:
     y: -4.5
     width: 4
     height: 8
+  - serializedVersion: 2
+    x: 18.15
+    y: -4.5
+    width: 4
+    height: 8
+  - serializedVersion: 2
+    x: -6.2
+    y: -17.52
+    width: 12.14
+    height: 2.25
   _gizmoColor: {r: 1, g: 0, b: 0, a: 0.3}
   _timeBetweenSpawns: 0.2
   _timeBetweenWaves: 1
