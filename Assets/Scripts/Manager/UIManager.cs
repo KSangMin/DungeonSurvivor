@@ -17,8 +17,10 @@ public class UIManager : Singleton<UIManager>
 
     private UIState curState;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         homeUI = GetComponentInChildren<HomeUI>(true);
         homeUI.Init();
         gameUI = GetComponentInChildren<GameUI>(true);

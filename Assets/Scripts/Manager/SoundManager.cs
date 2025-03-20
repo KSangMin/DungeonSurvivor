@@ -13,9 +13,10 @@ public class SoundManager : Singleton<SoundManager>
 
     public SoundSource soundSourcePrefab;
 
-    private void Awake()
+    public override void Awake()
     {
         base.Awake();
+
         _musicAudioSource = GetComponent<AudioSource>();
         _musicAudioSource.volume = musicVolume;
         _musicAudioSource.loop = true;

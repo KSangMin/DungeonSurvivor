@@ -11,7 +11,9 @@ public class GameManager : Singleton<GameManager>
 
     public static bool isFirstLoading = true;
 
-    private void Awake()
+    private CameraShake _cameraShake;
+
+    public override void Awake()
     {
         base.Awake();
 
@@ -21,7 +23,11 @@ public class GameManager : Singleton<GameManager>
         _playerResourceController = player.GetComponent<ResourceController>();
         _playerResourceController.RemoveHealthChangeEvent(UIManager.Instance.ChangePlayerHP);
         _playerResourceController.AddHealthChangeEvent(UIManager.Instance.ChangePlayerHP);
+
+        _cameraShake = FindObjectOfType<CameraShake>();
+        MainCameraShake();
     }
+
     private void Start()
     {
         if (!isFirstLoading)
@@ -56,5 +62,10 @@ public class GameManager : Singleton<GameManager>
     {
         EnemyManager.Instance.StopWave();
         UIManager.Instance.SetGameOver();
+    }
+
+    public void MainCameraShake()
+    {
+        _cameraShake.ShakeCamera(1, 1, 1);
     }
 }
