@@ -69,7 +69,7 @@ public class BaseController : MonoBehaviour
 
     public void Movement(Vector2 dir)
     {
-        dir *= statHandler.Speed;
+        dir *= statHandler.GetStat(StatType.Speed);
         if (knockbackDuration > 0f)
         {
             dir *= 0.2f;

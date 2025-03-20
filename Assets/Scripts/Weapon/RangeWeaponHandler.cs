@@ -21,13 +21,21 @@ public class RangeWeaponHandler : WeaponHandler
     public int ProjectileAngle { get { return _projectileAngle; } }
     [SerializeField] private Color _projectileColor;
     public Color Projectilecolor { get { return _projectileColor; } }
+    private StatHandler _statHandler;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        _statHandler = GetComponentInParent<StatHandler>(); 
+    }
 
     public override void Attack()
     {
         base.Attack();
 
         float projectileAngleSpace = ProjectileAngle;
-        int num = ProjectilePerShot;
+        int num = ProjectilePerShot + (int)_statHandler.GetStat(StatType.ProjectileCount);
 
         float minAngle = -(num / 2f) * projectileAngleSpace;
 

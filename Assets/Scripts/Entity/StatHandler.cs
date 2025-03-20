@@ -4,18 +4,43 @@ using UnityEngine;
 
 public class StatHandler : MonoBehaviour
 {
-    [Range(1, 100)][SerializeField] private int _health = 10;
-    public int Health
+    public StatData statData;
+    private Dictionary<StatType, float> curStats = new Dictionary<StatType, float>();
+
+    private void Awake()
     {
-        get => _health;
-        set => _health = Mathf.Clamp(value, 0, 100);
+        InitStats();
     }
 
-    [Range(1, 100)][SerializeField] private int _speed = 3;
-    public int Speed
+    void InitStats()
     {
-        get => _speed;
-        set => _speed = Mathf.Clamp(value, 0, 20);
+        foreach(StatEntry entry in statData.stats)
+        {
+            curStats[entry.statType] = entry.baseValue;
+        }
+    }
+
+    public float GetStat(StatType type)
+    {
+        return curStats.ContainsKey(type) ? curStats[type] : 0f;
+    }
+
+    public void ModifyStat(StatType type, float amount, bool isPermanent = true, float durtaion = 0)
+    {
+        if(!curStats.ContainsKey(type)) return;
+
+        curStats[type] += amount;
+
+        if (!isPermanent)
+        {
+            StartCoroutine(RemoveStatAfterDuration(type, amount, durtaion));
+        }
+    }
+
+    IEnumerator RemoveStatAfterDuration(StatType type, float amount, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        curStats[type] -= amount;
     }
 }
 
